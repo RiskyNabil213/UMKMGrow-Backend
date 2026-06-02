@@ -1,0 +1,51 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+generator client {
+  provider = "prisma-client-js"
+}
+model User {
+  id           Int           @id @default(autoincrement())
+  email        String        @unique
+  password     String?
+  name         String?
+  businessName String?
+  role         String        @default("user")
+  isPremium    Boolean       @default(false) // <-- PASTIKAN BARIS INI ADA DI MODEL USER
+  googleId     String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  chats        Chat[]
+  jobs         Job[]
+  posts        Post[]
+}
+
+model Chat {
+  id        Int      @id @default(autoincrement())
+  role      String   // <-- PASTIKAN BARIS INI ADA (user / assistant)
+  message   String
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+}
+
+model Job {
+  id        Int      @id @default(autoincrement())
+  title     String
+  company   String
+  location  String
+  type      String
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+}
+
+model Post {
+  id        Int      @id @default(autoincrement())
+  author    String
+  content   String
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+}
