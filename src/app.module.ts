@@ -13,6 +13,7 @@ import { BusinessModule } from './business/business.module';
 import { JobsModule } from './jobs/jobs.module';
 import { SuppliersModule } from './suppliers/suppliers.module';
 import { CommunityModule } from './community/community.module';
+import { AdminModule } from './admin/admin.module';
 import { AiModule } from './ai/ai.module';
 
 @Module({
@@ -30,6 +31,7 @@ import { AiModule } from './ai/ai.module';
     SuppliersModule,
     CommunityModule,
     AiModule,
+    AdminModule,
   ],
   controllers: [AppController],
   providers: [AppService],

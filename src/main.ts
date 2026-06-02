@@ -2,6 +2,26 @@ import 'dotenv/config';
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
+import { PrismaService } from './prisma/prisma.service';
+import * as bcrypt from 'bcrypt';
+
+async function seedAdmin(prisma: PrismaService) {
+  const email = 'admin123@gmail.com';
+  const existing = await prisma.user.findUnique({ where: { email } });
+  if (!existing) {
+    const hashed = await bcrypt.hash('adminumkgrow123', 10);
+    await prisma.user.create({
+      data: {
+        name:  'Admin UMKM Grow',
+        email,
+        password: hashed,
+        role: 'admin',
+        plan: 'free',
+      },
+    });
+    console.log('✅ Admin account seeded: admin123@gmail.com');
+  }
+}
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -18,6 +38,10 @@ async function bootstrap() {
       transform: true,
     }),
   );
+
+  // Seed admin account
+  const prisma = app.get(PrismaService);
+  await seedAdmin(prisma);
 
   // Setup Swagger jika package tersedia
   try {

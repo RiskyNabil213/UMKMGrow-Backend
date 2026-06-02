@@ -1,4 +1,4 @@
-import { Controller, Get, Patch, Body, UseGuards, Request, BadRequestException } from '@nestjs/common';
+import { Controller, Get, Patch, Body, UseGuards, Request, BadRequestException, ForbiddenException } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { AuthGuard } from '@nestjs/passport';
 import * as bcrypt from 'bcrypt';
@@ -11,6 +11,19 @@ export class UsersController {
     private readonly usersService: UsersService,
     private readonly prisma: PrismaService,
   ) {}
+
+  /** GET /users — hanya admin, return semua user */
+  @Get()
+  async getAllUsers(@Request() req) {
+    if (req.user.role !== 'admin') throw new ForbiddenException('Akses ditolak');
+    return this.prisma.user.findMany({
+      orderBy: { createdAt: 'desc' },
+      select: {
+        id: true, name: true, email: true, businessName: true,
+        role: true, plan: true, planExpiresAt: true, createdAt: true,
+      },
+    });
+  }
 
   @Get('me')
   async getProfile(@Request() req) {
