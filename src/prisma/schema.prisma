@@ -3,8 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider = env("DB_PROVIDER")
+  url      = env("DATABASE_URL")
 }
 
 model User {
@@ -17,14 +17,10 @@ model User {
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
 
-  // Role: admin | pemilik_usaha | customer
   role          String    @default("customer")
-
-  // Subscription
   plan          String    @default("free")
   planExpiresAt DateTime?
 
-  // Relasi
   transactions Transaction[]
   chatHistory  Chat[]
   payments     Payment[]
