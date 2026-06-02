@@ -1,7 +1,7 @@
 {
   "build": {
     "builder": "RAILPACK",
-    "buildCommand": "npm install && npm run build && npx prisma generate --schema=src/prisma/schema.prisma"
+    "buildCommand": "npm install && npm run build && npx prisma generate --schema=prisma/schema.prisma"
   },
   "deploy": {
     "startCommand": "sh start.sh",

@@ -7,7 +7,7 @@ echo "========================="
 
 if [ -n "$DATABASE_URL" ]; then
   echo "Running migrations..."
-  npx prisma migrate deploy --schema=src/prisma/schema.prisma || echo "Migration failed, continuing anyway..."
+  npx prisma migrate deploy --schema=prisma/schema.prisma || echo "Migration failed, continuing anyway..."
 else
   echo "WARNING: DATABASE_URL not set, skipping migration"
 fi
